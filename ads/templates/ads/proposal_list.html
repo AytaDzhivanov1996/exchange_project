@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Предложения обмена{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Полученные предложения</h5>
+            </div>
+            <div class="card-body">
+                {% if received_proposals %}
+                    {% for proposal in received_proposals %}
+                        <div class="border rounded p-3 mb-3">
+                            <h6>{{ proposal.ad_sender.title }}</h6>
+                            <p><strong>Предлагает:</strong> {{ proposal.ad_sender.user.username }}</p>
+                            <p><strong>За:</strong> {{ proposal.ad_receiver.title }}</p>
+                            <p><strong>Комментарий:</strong> {{ proposal.comment }}</p>
+                            <p><strong>Статус:</strong> 
+                                <span class="badge bg-{% if proposal.status == 'pending' %}warning{% elif proposal.status == 'accepted' %}success{% else %}danger{% endif %}">
+                                    {{ proposal.get_status_display }}
+                                </span>
+                            </p>
+                            <p><small class="text-muted">{{ proposal.created_at|date:"d.m.Y H:i" }}</small></p>
+                            
+                            {% if proposal.status == 'pending' %}
+                                <form method="post" action="{% url 'update_proposal_status' proposal.pk %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="status" value="accepted">
+                                    <button type="submit" class="btn btn-success btn-sm">Принять</button>
+                                </form>
+                                <form method="post" action="{% url 'update_proposal_status' proposal.pk %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="status" value="rejected">
+                                    <button type="submit" class="btn btn-danger btn-sm">Отклонить</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Нет полученных предложений.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Отправленные предложения</h5>
+            </div>
+            <div class="card-body">
+                {% if sent_proposals %}
+                    {% for proposal in sent_proposals %}
+                        <div class="border rounded p-3 mb-3">
+                            <h6>{{ proposal.ad_receiver.title }}</h6>
+                            <p><strong>Получатель:</strong> {{ proposal.ad_receiver.user.username }}</p>
+                            <p><strong>Ваше предложение:</strong> {{ proposal.ad_sender.title }}</p>
+                            <p><strong>Комментарий:</strong> {{ proposal.comment }}</p>
+                            <p><strong>Статус:</strong> 
+                                <span class="badge bg-{% if proposal.status == 'pending' %}warning{% elif proposal.status == 'accepted' %}success{% else %}danger{% endif %}">
+                                    {{ proposal.get_status_display }}
+                                </span>
+                            </p>
+                            <p><small class="text-muted">{{ proposal.created_at|date:"d.m.Y H:i" }}</small></p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Нет отправленных предложений.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
