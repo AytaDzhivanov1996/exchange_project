@@ -7,7 +7,7 @@
 1. Клонируйте репозиторий:
 ```bash
 git clone <repository-url>
-cd exchange-app
+cd exchange_project
 ```
 
 2. Создайте виртуальное окружение:
