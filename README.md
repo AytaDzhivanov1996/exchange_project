@@ -21,19 +21,20 @@ venv\Scripts\activate     # Windows
 ```bash
 pip install -r requirements.txt
 ```
+4. Не забудьте установить переменные окружения в файле .env
 
-4. Примените миграции:
+5. Примените миграции:
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-5. Создайте суперпользователя:
+6. Создайте суперпользователя:
 ```bash
 python manage.py createsuperuser
 ```
 
-6. Запустите сервер:
+7. Запустите сервер:
 ```bash
 python manage.py runserver
 ```
